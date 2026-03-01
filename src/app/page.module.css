@@ -1,141 +1,583 @@
+/* ============================================
+   トップページ CSS
+   ============================================ */
+
+/* ページ全体 */
 .page {
-  --background: #fafafa;
-  --foreground: #fff;
-
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
-  display: flex;
   min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
 }
 
-.main {
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
-}
-
-.intro {
+/* ============================================
+   ヒーローセクション
+   ============================================ */
+.hero {
+  text-align: center;
+  padding: 0;
+  min-height: 480px;
+  /* 夜の神域グラデーション */
+  background:
+    linear-gradient(180deg,
+      #0A0412 0%,
+      #150828 35%,
+      #1A0A2E 65%,
+      #200D1A 100%);
+  border-bottom: 1px solid rgba(200, 146, 10, 0.2);
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
 }
 
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
+/* 霧エフェクト */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 30%, rgba(107, 53, 168, 0.22) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 80% 60%, rgba(181, 49, 30, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 30% at 50% 0%, rgba(200, 146, 10, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+  animation: mistMove 14s ease-in-out infinite alternate;
 }
 
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
+/* 星屑 */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle 1px at 15% 20%, rgba(245, 217, 122, 0.8) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 35% 12%, rgba(255, 255, 255, 0.55) 0%, transparent 100%),
+    radial-gradient(circle 1px at 70% 22%, rgba(200, 146, 10, 0.9) 0%, transparent 100%),
+    radial-gradient(circle 1px at 88% 16%, rgba(255, 255, 255, 0.45) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 55% 8%, rgba(245, 217, 122, 0.7) 0%, transparent 100%),
+    radial-gradient(circle 1px at 5% 42%, rgba(255, 255, 255, 0.35) 0%, transparent 100%),
+    radial-gradient(circle 1px at 92% 38%, rgba(200, 146, 10, 0.6) 0%, transparent 100%),
+    radial-gradient(circle 1px at 25% 52%, rgba(245, 217, 122, 0.5) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 78% 44%, rgba(255, 180, 200, 0.35) 0%, transparent 100%);
+  pointer-events: none;
+  animation: starDrift 22s ease-in-out infinite alternate;
 }
 
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
+/* ヒーロー本体レイアウト */
+.heroContent {
+  position: relative;
+  z-index: 2;
   display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
-  gap: 16px;
-  font-size: 14px;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-3xl) var(--spacing-lg) calc(var(--spacing-2xl) + 40px);
+  flex: 1;
 }
 
-.ctas a {
+/* SVG鳥居シルエット（背景） */
+.heroToriiBg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(600px, 95vw);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeInUp 1.5s ease 0.2s forwards;
+}
+
+.heroToriiSvg {
+  width: 100%;
+  height: auto;
+  color: #C8920A;
+  opacity: 0.14;
+  animation: toriiSway 10s ease-in-out infinite;
+  transform-origin: center bottom;
+  filter: drop-shadow(0 0 12px rgba(200, 146, 10, 0.25));
+}
+
+/* 浮遊狐アイコン */
+.heroKonWrapper {
+  position: relative;
+  margin-bottom: var(--spacing-md);
+  animation: fadeInUp 0.7s ease 0.4s both;
+}
+
+.heroKonIcon {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px solid rgba(200, 146, 10, 0.55);
+  box-shadow:
+    0 0 0 8px rgba(200, 146, 10, 0.07),
+    0 0 30px rgba(181, 49, 30, 0.35),
+    0 0 60px rgba(107, 53, 168, 0.2);
+  animation: floatKon 4s ease-in-out infinite;
+  display: block;
+}
+
+/* 光輪 */
+.heroKonGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+      rgba(200, 146, 10, 0.18) 0%,
+      rgba(181, 49, 30, 0.12) 40%,
+      transparent 75%);
+  animation: floatKon 4s ease-in-out infinite reverse;
+  pointer-events: none;
+}
+
+/* ヒーロータイトル */
+.heroTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--spacing-md);
+  animation: fadeInUp 0.6s ease 0.5s both;
+  color: rgba(245, 230, 200, 0.95);
+  text-shadow: 0 2px 24px rgba(200, 146, 10, 0.3);
+}
+
+/* 金色グラデーション文字 */
+.heroTitleAccent {
+  background: linear-gradient(135deg, #F5D97A 0%, #E8A040 50%, #F5D97A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.heroTitleAccent::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #E8A040, transparent);
+  border-radius: 2px;
+}
+
+.heroSubtitle {
+  font-size: clamp(0.95rem, 2.5vw, 1.12rem);
+  font-weight: 400;
+  color: rgba(220, 200, 240, 0.8);
+  margin-bottom: var(--spacing-md);
+  animation: fadeInUp 0.6s ease 0.55s both;
+  letter-spacing: 0.04em;
+}
+
+.heroDescription {
+  font-size: 0.9rem;
+  color: rgba(185, 165, 220, 0.6);
+  line-height: 1.9;
+  max-width: 480px;
+  margin: 0 auto var(--spacing-lg);
+  animation: fadeInUp 0.6s ease 0.6s both;
+}
+
+/* 波型底辺装飾 */
+.heroWave {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  line-height: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.heroWave svg {
+  width: 100%;
+  height: 50px;
+  display: block;
+}
+
+
+
+/* 背景：和紙のさざ波文様（二重円グラデーション） */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  height: 700px;
+  background:
+    radial-gradient(circle at center, transparent 60px, rgba(200, 57, 43, 0.04) 61px, transparent 120px),
+    radial-gradient(circle at center, transparent 130px, rgba(200, 57, 43, 0.03) 131px, transparent 200px),
+    radial-gradient(circle at center, transparent 210px, rgba(200, 57, 43, 0.025) 211px, transparent 290px),
+    radial-gradient(circle at center, transparent 300px, rgba(200, 57, 43, 0.02) 301px, transparent 350px);
+  pointer-events: none;
+  animation: ripple 8s ease-in-out infinite;
+}
+
+/* 右上の角・装飾線 */
+.hero::after {
+  content: '✦';
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  font-size: 1rem;
+  color: var(--color-accent);
+  opacity: 0.25;
+  letter-spacing: 8px;
+}
+
+.heroDecor {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.7;
+  animation: fadeInUp 0.6s ease 0.1s both;
+}
+
+.heroTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--spacing-md);
+  animation: fadeInUp 0.6s ease 0.2s both;
+}
+
+.heroTitleAccent {
+  color: var(--color-accent);
+  position: relative;
+}
+
+/* 朱色の下線アクセント */
+.heroTitleAccent::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--color-accent-gradient);
+  border-radius: 2px;
+  opacity: 0.6;
+}
+
+/* ヒーロー本体レイアウト */
+.heroContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-3xl) var(--spacing-lg) calc(var(--spacing-2xl) + 30px);
+  flex: 1;
+}
+
+/* SVG鳥居シルエット（背景） */
+.heroToriiBg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(500px, 90vw);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeInUp 1.2s ease 0.1s forwards;
+}
+
+.heroToriiSvg {
+  width: 100%;
+  height: auto;
+  color: var(--color-accent);
+  opacity: 0.07;
+  animation: toriiSway 8s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+/* 浮遊狐アイコン */
+.heroKonWrapper {
+  position: relative;
+  margin-bottom: var(--spacing-md);
+  animation: fadeInUp 0.7s ease 0.15s both;
+}
+
+.heroKonIcon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid rgba(181, 49, 30, 0.2);
+  box-shadow:
+    0 0 0 6px rgba(181, 49, 30, 0.05),
+    0 8px 24px rgba(100, 50, 30, 0.15);
+  animation: floatKon 4s ease-in-out infinite;
+  display: block;
+}
+
+/* 光輪（うしろに輝く円） */
+.heroKonGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+      rgba(230, 170, 120, 0.25) 0%,
+      rgba(181, 49, 30, 0.08) 50%,
+      transparent 75%);
+  animation: floatKon 4s ease-in-out infinite reverse;
+  pointer-events: none;
+}
+
+.heroSubtitle {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
+  animation: fadeInUp 0.6s ease 0.3s both;
+}
+
+.heroDescription {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  max-width: 500px;
+  margin: 0 auto var(--spacing-lg);
+  animation: fadeInUp 0.6s ease 0.35s both;
+}
+
+/* SNSリンクエリア（Xアカウント） */
+.heroSocial {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
+  margin-bottom: var(--spacing-xl);
+  animation: fadeInUp 0.6s ease 0.38s both;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
+/* X（Twitter）リンクバッジ */
+.xLink {
+  display: inline-flex;
+  align-items: center;
   gap: 8px;
+  padding: 9px 20px;
+  background-color: #000000;
+  color: #FFFFFF !important;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: all var(--transition);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
+.xLink:hover {
+  background-color: #1a1a1a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+  color: #FFFFFF !important;
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
+.xLink svg {
+  flex-shrink: 0;
+}
+
+/* 波型底辺装飾 */
+.heroWave {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  line-height: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.heroWave svg {
+  width: 100%;
+  height: 40px;
+  display: block;
+}
+
+/* 検索ボックス */
+.searchWrapper {
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  animation: fadeInUp 0.6s ease 0.4s both;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 14px 20px 14px 42px;
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-card);
+  transition: all var(--transition);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.searchInput:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(200, 57, 43, 0.1), var(--shadow-card);
+}
+
+.searchInput::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* ============================================
+   メインコンテンツ
+   ============================================ */
+.main {
+  padding: var(--spacing-2xl) 0 var(--spacing-3xl);
+}
+
+/* カテゴリフィルター */
+.categoryFilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.categoryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-card);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.categoryBtn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background-color: var(--color-accent-light);
+}
+
+.categoryBtnActive {
+  background-color: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(200, 57, 43, 0.3);
+}
+
+.categoryCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 5px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background-color: rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-full);
+}
+
+.categoryBtnActive .categoryCount {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* 記事グリッド */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+/* 検索結果なし */
+.emptyState {
+  text-align: center;
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.emptyEmoji {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.emptyText {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.emptyReset {
+  padding: 10px 20px;
+  background-color: var(--color-accent);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.emptyReset:hover {
+  background-color: var(--color-accent-hover);
+  box-shadow: 0 4px 12px rgba(200, 57, 43, 0.4);
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
   }
 
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
+  .hero {
+    padding: var(--spacing-2xl) var(--spacing-md) var(--spacing-xl);
   }
 }
 
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
+/* さざ波アニメーション（和風背景装飾） */
+@keyframes ripple {
+
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
   }
 
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
-
-  .page {
-    --background: #000;
-    --foreground: #000;
-
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.04);
   }
 }
