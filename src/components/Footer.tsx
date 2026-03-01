@@ -1,8 +1,17 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import type { Category } from '@/lib/mock-data';
 import styles from './Footer.module.css';
 
-export default function Footer() {
+interface FooterProps {
+    // Notionから動的に取得したカテゴリ一覧
+    categories: (Category | 'すべて')[];
+}
+
+export default function Footer({ categories }: FooterProps) {
+    // 'すべて'を除いたカテゴリのみ表示
+    const navCategories = categories.filter((c) => c !== 'すべて');
+
     return (
         <footer className={styles.footer}>
             <div className={styles.inner}>
@@ -29,15 +38,21 @@ export default function Footer() {
                     コン🦊が集めた、使えるAIプロンプトの巻物
                 </p>
 
-                {/* リンク */}
+                {/* リンク（Notion連動カテゴリ） */}
                 <nav className={styles.links}>
                     <Link href="/" className={styles.link}>ホーム</Link>
-                    <span className={styles.separator}>·</span>
-                    <Link href="/?category=文章生成" className={styles.link}>文章生成</Link>
-                    <span className={styles.separator}>·</span>
-                    <Link href="/?category=画像生成" className={styles.link}>画像生成</Link>
-                    <span className={styles.separator}>·</span>
-                    <Link href="/?category=コード生成" className={styles.link}>コード生成</Link>
+                    {navCategories.map((cat) => (
+                        <>
+                            <span key={`sep-${cat}`} className={styles.separator}>·</span>
+                            <Link
+                                key={cat}
+                                href={`/?category=${encodeURIComponent(cat)}`}
+                                className={styles.link}
+                            >
+                                {cat}
+                            </Link>
+                        </>
+                    ))}
                     <span className={styles.separator}>·</span>
                     {/* Xアイコンリンク */}
                     <a
@@ -60,4 +75,3 @@ export default function Footer() {
         </footer>
     );
 }
-
