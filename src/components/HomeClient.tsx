@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import type { Article, Category } from '@/lib/mock-data';
 import ArticleCard from '@/components/ArticleCard';
@@ -71,8 +72,8 @@ export default function HomeClient({ articles, categories }: HomeClientProps) {
 
                 {/* メインコンテンツ（前面） */}
                 <div className={styles.heroContent}>
-                    {/* 浮遊する狐アイコン */}
-                    <div className={styles.heroKonWrapper}>
+                    {/* 浮遊する狐アイコン（クリックで隠しページへ） */}
+                    <Link href="/secret" className={styles.heroKonWrapper} title="">
                         <Image
                             src="/kon_icon.png"
                             alt="コン"
@@ -83,7 +84,7 @@ export default function HomeClient({ articles, categories }: HomeClientProps) {
                         />
                         {/* 光輪エフェクト */}
                         <div className={styles.heroKonGlow} aria-hidden="true" />
-                    </div>
+                    </Link>
 
                     <h1 className={styles.heroTitle}>
                         <span className={styles.heroTitleAccent}>コン</span>の巻物
