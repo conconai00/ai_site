@@ -337,3 +337,30 @@
     color: var(--color-accent);
     opacity: 0.7;
 }
+
+/* ===== 注意書きボックス ===== */
+.noteBox {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: linear-gradient(135deg, rgba(200, 146, 10, 0.08) 0%, rgba(255, 248, 225, 0.6) 100%);
+    border: 1.5px solid rgba(200, 146, 10, 0.35);
+    border-left: 4px solid #C8920A;
+    border-radius: var(--radius-md);
+}
+
+.noteIcon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    line-height: 1.6;
+}
+
+.noteText {
+    font-size: 0.9rem;
+    color: var(--color-text-primary);
+    line-height: 1.75;
+    margin: 0;
+    font-weight: 500;
+}

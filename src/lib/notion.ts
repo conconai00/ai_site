@@ -136,6 +136,8 @@ export async function getArticlesFromNotion(): Promise<Article[]> {
         // 本文からプロンプトと成果物を取得
         const { prompt, outputs } = await getPageContent(notionPage.id);
 
+        const note = getText(props['注意書き']) || undefined;
+
         const article: Article = {
             id,
             slug: id,
@@ -144,6 +146,7 @@ export async function getArticlesFromNotion(): Promise<Article[]> {
             category: (category as Category) || 'その他',
             tags,
             tools: tools.length > 0 ? tools : undefined,
+            note,
             prompt,
             outputs: outputs.length > 0
                 ? outputs

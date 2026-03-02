@@ -17,6 +17,7 @@ export interface Article {
   category: Category;
   tags: string[];
   tools?: string[];          // 使用したAIツール（例: ChatGPT, Midjourney）
+  note?: string;             // 注意書き（画像添付の注意など、任意）
   prompt: string;            // メインプロンプト（コードブロック表示）
   outputs: PromptOutput[];   // 成果物（複数可）
   createdAt: string;         // ISO日付文字列

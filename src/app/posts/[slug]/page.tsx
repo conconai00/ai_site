@@ -134,6 +134,14 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
                         {/* ⭐️ コピーボタン付きプロンプトブロック */}
                         <PromptBlock prompt={article.prompt} label={article.title} />
+
+                        {/* ⚠️ 注意書き（Notionで設定がある場合のみ表示） */}
+                        {article.note && (
+                            <div className={styles.noteBox}>
+                                <span className={styles.noteIcon}>⚠️</span>
+                                <p className={styles.noteText}>{article.note}</p>
+                            </div>
+                        )}
                     </section>
 
                     <hr className={styles.sectionDivider} />
