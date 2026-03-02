@@ -187,6 +187,7 @@ export async function getArticleFromNotion(slug: string): Promise<Article | unde
         const tools = getMultiSelect(props['使用ツール']);
         const createdAt = getDate(props['作成日']);
         const emoji = getSelect(props['絵文字']) || '📄';
+        const note = getText(props['注意書き']) || undefined;
 
         const { prompt, outputs } = await getPageContent(notionPage.id);
 
@@ -198,6 +199,7 @@ export async function getArticleFromNotion(slug: string): Promise<Article | unde
             category: (category as Category) || 'その他',
             tags,
             tools: tools.length > 0 ? tools : undefined,
+            note,
             prompt,
             outputs,
             createdAt,
