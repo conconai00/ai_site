@@ -26,7 +26,15 @@ export default function ArticleCard({ article }: ArticleCardProps) {
         <Link href={`/posts/${article.slug}`} className={styles.card}>
             {/* サムネイルエリア */}
             <div className={styles.thumbnail}>
-                {article.outputs[0]?.type === 'image' ? (
+                {/* 優先順位: 1. Notionの「サムネイル」 2. 最初の画像output 3. 絵文字 */}
+                {article.thumbnail ? (
+                    <Image
+                        src={article.thumbnail}
+                        alt={article.title}
+                        fill
+                        className={styles.thumbnailImage}
+                    />
+                ) : article.outputs[0]?.type === 'image' ? (
                     <Image
                         src={article.outputs[0].content}
                         alt={article.outputs[0].alt || article.title}

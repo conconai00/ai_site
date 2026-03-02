@@ -16,12 +16,13 @@ export interface Article {
   description: string;       // 記事の簡単な説明
   category: Category;
   tags: string[];
-  tools?: string[];          // 使用したAIツール（例: ChatGPT, Midjourney）
-  note?: string;             // 注意書き（画像添付の注意など、任意）
-  prompt: string;            // メインプロンプト（コードブロック表示）
+  tools?: string[];          // 使用したAIツール
+  note?: string;             // 注意書き（任意）
+  thumbnail?: string;        // アイキャッチ画像URL（Notionの「サムネイル」プロパティ）
+  prompt: string;            // メインプロンプト
   outputs: PromptOutput[];   // 成果物（複数可）
-  createdAt: string;         // ISO日付文字列
-  emoji?: string;            // サムネイル用絵文字
+  createdAt: string;
+  emoji?: string;
 }
 
 

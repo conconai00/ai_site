@@ -147,12 +147,9 @@ export async function getArticlesFromNotion(): Promise<Article[]> {
             tags,
             tools: tools.length > 0 ? tools : undefined,
             note,
+            thumbnail: thumbnailUrl || undefined,
             prompt,
-            outputs: outputs.length > 0
-                ? outputs
-                : thumbnailUrl
-                    ? [{ type: 'image', content: thumbnailUrl, alt: title }]
-                    : [],
+            outputs,
             createdAt,
             emoji,
         };
@@ -188,6 +185,7 @@ export async function getArticleFromNotion(slug: string): Promise<Article | unde
         const createdAt = getDate(props['作成日']);
         const emoji = getSelect(props['絵文字']) || '📄';
         const note = getText(props['注意書き']) || undefined;
+        const thumbnailUrl = getFileUrl(props['サムネイル']);
 
         const { prompt, outputs } = await getPageContent(notionPage.id);
 
@@ -200,6 +198,7 @@ export async function getArticleFromNotion(slug: string): Promise<Article | unde
             tags,
             tools: tools.length > 0 ? tools : undefined,
             note,
+            thumbnail: thumbnailUrl || undefined,
             prompt,
             outputs,
             createdAt,
