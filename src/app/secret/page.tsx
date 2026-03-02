@@ -84,7 +84,7 @@ export default function SecretPage() {
                     <div className={styles.card}>
                         <div className={styles.cardHeader}>
                             <span className={styles.cardIcon}>🦊</span>
-                            <h2 className={styles.cardTitle}>裏コミュニティー「狐の隠れ社⛩️」とは？</h2>
+                            <h2 className={styles.cardTitle}>「狐の隠れ社⛩️」とは？</h2>
                         </div>
                         <p className={styles.cardText}>
                             コンのAI知見・研究結果、今やっていること全てを曝け出すコミュニティです。<br />
