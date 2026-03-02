@@ -20,9 +20,9 @@ export default function HomeClient({ articles, categories }: HomeClientProps) {
     const [searchQuery, setSearchQuery] = useState('');
     const [animKey, setAnimKey] = useState(0);
 
-    // カテゴリ・検索でフィルタリング
+    // カテゴリ・検索でフィルタリング（マルチセレクト対応）
     const filteredArticles = articles.filter((article) => {
-        const matchCategory = activeCategory === 'すべて' || article.category === activeCategory;
+        const matchCategory = activeCategory === 'すべて' || article.category.includes(activeCategory as Category);
         const matchSearch =
             searchQuery === '' ||
             article.title.includes(searchQuery) ||
@@ -142,7 +142,7 @@ export default function HomeClient({ articles, categories }: HomeClientProps) {
                                 <span className={styles.categoryCount}>
                                     {cat === 'すべて'
                                         ? articles.length
-                                        : articles.filter((a) => a.category === cat).length}
+                                        : articles.filter((a) => a.category.includes(cat as Category)).length}
                                 </span>
                             </button>
                         ))}

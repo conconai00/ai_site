@@ -14,7 +14,7 @@ export interface Article {
   slug: string;
   title: string;
   description: string;       // 記事の簡単な説明
-  category: Category;
+  category: Category[];      // マルチセレクト対応（複数カテゴリ可）
   tags: string[];
   tools?: string[];          // 使用したAIツール
   note?: string;             // 注意書き（任意）
@@ -42,7 +42,7 @@ export const mockArticles: Article[] = [
     slug: 'blog-to-instagram-caption',
     title: 'ブログ記事をInstagramキャプションに変換するプロンプト',
     description: 'ブログの長文記事を、エンゲージメントが高いInstagramキャプションに自動変換。ハッシュタグも自動生成。',
-    category: '文章生成',
+    category: ['文章生成'],
     tags: ['SNS', 'Instagram', 'リライト'],
     emoji: '📱',
     prompt: `以下のブログ記事を、Instagramに最適化したキャプションに変換してください。
@@ -84,7 +84,7 @@ export const mockArticles: Article[] = [
     slug: 'midjourney-portrait-prompt',
     title: 'Midjourneyで"雅な狐の神"を生成するプロンプト',
     description: '和風ファンタジー世界観の神秘的な狐の神様を、Midjourneyで高クオリティに生成するプロンプト集。',
-    category: '画像生成',
+    category: ['画像生成'],
     tags: ['Midjourney', '和風', 'キャラクター'],
     emoji: '🦊',
     prompt: `a majestic fox deity in japanese shrine setting, wearing ornate shrine maiden robes with golden kitsune mask, surrounded by floating red torii gates and cherry blossoms, ethereal glowing spiritual energy, ultra detailed fur texture, cinematic lighting, 8k resolution --ar 2:3 --style raw --v 6.1`,
@@ -102,7 +102,7 @@ export const mockArticles: Article[] = [
     slug: 'youtube-script-hook',
     title: 'YouTube動画のフック（冒頭30秒）を作るプロンプト',
     description: '視聴者がスキップしない、引き込まれる冒頭30秒のスクリプトを自動生成。再生維持率アップに直結。',
-    category: '文章生成',
+    category: ['文章生成'],
     tags: ['YouTube', '動画スクリプト', 'マーケティング'],
     emoji: '🎬',
     prompt: `以下の動画企画をもとに、視聴者がスキップできなくなる「冒頭30秒のフック」を作成してください。
@@ -149,7 +149,7 @@ export const mockArticles: Article[] = [
     slug: 'code-review-prompt',
     title: 'コードレビューを10倍厳しくするプロンプト',
     description: 'シニアエンジニア視点でコードの問題点を徹底的に洗い出す。バグ・セキュリティ・パフォーマンス・可読性を多角的に分析。',
-    category: 'コード生成',
+    category: ['コード生成'],
     tags: ['コードレビュー', 'エンジニア', 'セキュリティ'],
     emoji: '🔍',
     prompt: `あなたは10年以上の経験を持つシニアソフトウェアエンジニアです。
@@ -203,7 +203,7 @@ return user;
     slug: 'meeting-minutes-summarizer',
     title: '会議の文字起こしを一発で議事録にするプロンプト',
     description: '雑多な会議の文字起こしテキストから、構造化された議事録を自動生成。アクションアイテムも自動抽出。',
-    category: '分析・要約',
+    category: ['分析・要約'],
     tags: ['議事録', 'ビジネス', 'メモ'],
     emoji: '📝',
     prompt: `以下の会議の文字起こしを、読みやすい議事録に変換してください。
@@ -260,7 +260,7 @@ return user;
     slug: 'sales-email-generator',
     title: '開封率が上がる営業メールを書くプロンプト',
     description: 'テンプレート感がなく、相手に合わせたパーソナライズ営業メールを生成。件名も同時に複数案提案。',
-    category: '文章生成',
+    category: ['文章生成'],
     tags: ['営業', 'メール', 'セールス'],
     emoji: '💌',
     prompt: `あなたは優秀なBtoBセールスライターです。
@@ -311,10 +311,10 @@ export function getArticleBySlug(slug: string): Article | undefined {
   return mockArticles.find((article) => article.slug === slug);
 }
 
-// カテゴリで記事をフィルタリング
+// カテゴリで記事をフィルタリング（マルチセレクト対応）
 export function getArticlesByCategory(category: Category | 'すべて'): Article[] {
   if (category === 'すべて') return mockArticles;
-  return mockArticles.filter((article) => article.category === category);
+  return mockArticles.filter((article) => article.category.includes(category));
 }
 
 // カテゴリ一覧を取得

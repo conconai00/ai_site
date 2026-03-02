@@ -20,7 +20,9 @@ function formatDate(dateString: string): string {
 }
 
 export default function ArticleCard({ article }: ArticleCardProps) {
-    const categoryColor = categoryColors[article.category];
+    // 最初のカテゴリでバッジ色を決定（マルチセレクト対応）
+    const primaryCategory = article.category[0];
+    const categoryColor = categoryColors[primaryCategory] ?? categoryColors['その他'];
 
     return (
         <Link href={`/posts/${article.slug}`} className={styles.card}>
@@ -46,16 +48,24 @@ export default function ArticleCard({ article }: ArticleCardProps) {
                         <span>{article.emoji || '📄'}</span>
                     </div>
                 )}
-                {/* カテゴリバッジ（サムネイル左上） */}
-                <span
-                    className={styles.categoryBadge}
-                    style={{
-                        backgroundColor: categoryColor.bg,
-                        color: categoryColor.text,
-                    }}
-                >
-                    {article.category}
-                </span>
+                {/* カテゴリバッジ（サムネイル左上）マルチセレクト対応 */}
+                <div className={styles.categoryBadges}>
+                    {article.category.map((cat) => {
+                        const color = categoryColors[cat] ?? categoryColors['その他'];
+                        return (
+                            <span
+                                key={cat}
+                                className={styles.categoryBadge}
+                                style={{
+                                    backgroundColor: color.bg,
+                                    color: color.text,
+                                }}
+                            >
+                                {cat}
+                            </span>
+                        );
+                    })}
+                </div>
             </div>
 
             {/* コンテンツエリア */}

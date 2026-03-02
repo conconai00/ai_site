@@ -48,17 +48,25 @@
     font-size: 3.5rem;
 }
 
-/* カテゴリバッジ */
-.categoryBadge {
+/* カテゴリバッジ（複数対応コンテナ） */
+.categoryBadges {
     position: absolute;
     top: 10px;
     left: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-width: calc(100% - 20px);
+}
+
+.categoryBadge {
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.03em;
     padding: 4px 10px;
     border-radius: var(--radius-full);
     backdrop-filter: blur(8px);
+    white-space: nowrap;
 }
 
 /* コンテンツ */

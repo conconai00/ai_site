@@ -77,18 +77,27 @@ export async function getCategoriesFromNotion(): Promise<(Category | 'すべて'
         const db = await notion.databases.retrieve({ database_id: DATABASE_ID }) as {
             properties: Record<string, {
                 type: string;
-                select?: { options: Array<{ name: string }> }
+                select?: { options: Array<{ name: string }> };
+                multi_select?: { options: Array<{ name: string }> };
             }>
         };
 
         const categoryProp = db.properties['カテゴリ'];
-        if (!categoryProp || categoryProp.type !== 'select') {
-            return ['すべて'];
+        if (!categoryProp) return ['すべて'];
+
+        // マルチセレクトの場合
+        if (categoryProp.type === 'multi_select') {
+            const cats = (categoryProp.multi_select?.options ?? []).map((o) => o.name as Category);
+            return ['すべて', ...cats];
         }
 
-        // selectのオプション名を取得
-        const cats = (categoryProp.select?.options ?? []).map((o) => o.name as Category);
-        return ['すべて', ...cats];
+        // 単一セレクトの場合（フォールバック）
+        if (categoryProp.type === 'select') {
+            const cats = (categoryProp.select?.options ?? []).map((o) => o.name as Category);
+            return ['すべて', ...cats];
+        }
+
+        return ['すべて'];
     } catch (e) {
         console.error('[Notion] カテゴリ取得エラー:', e);
         return ['すべて'];
@@ -126,7 +135,11 @@ export async function getArticlesFromNotion(): Promise<Article[]> {
         // プロパティを取得
         const title = getText(props['タイトル']);
         const description = getText(props['説明']);
-        const category = getSelect(props['カテゴリ']) as Category;
+        // カテゴリはマルチセレクトとして取得（シングルセレクトの場合は配列に変換）
+        const categoryRaw = getMultiSelect(props['カテゴリ']);
+        const category = categoryRaw.length > 0
+            ? categoryRaw as Category[]
+            : [getSelect(props['カテゴリ']) as Category].filter(Boolean) as Category[];
         const tags = getMultiSelect(props['タグ']);
         const tools = getMultiSelect(props['使用ツール']);
         const createdAt = getDate(props['作成日']);
@@ -143,7 +156,7 @@ export async function getArticlesFromNotion(): Promise<Article[]> {
             slug: id,
             title,
             description,
-            category: (category as Category) || 'その他',
+            category: category.length > 0 ? category : ['その他'],
             tags,
             tools: tools.length > 0 ? tools : undefined,
             note,
@@ -179,7 +192,11 @@ export async function getArticleFromNotion(slug: string): Promise<Article | unde
 
         const title = getText(props['タイトル']);
         const description = getText(props['説明']);
-        const category = getSelect(props['カテゴリ']) as Category;
+        // カテゴリはマルチセレクトとして取得（シングルセレクトの場合は配列に変換）
+        const categoryRaw = getMultiSelect(props['カテゴリ']);
+        const category = categoryRaw.length > 0
+            ? categoryRaw as Category[]
+            : [getSelect(props['カテゴリ']) as Category].filter(Boolean) as Category[];
         const tags = getMultiSelect(props['タグ']);
         const tools = getMultiSelect(props['使用ツール']);
         const createdAt = getDate(props['作成日']);
@@ -194,7 +211,7 @@ export async function getArticleFromNotion(slug: string): Promise<Article | unde
             slug,
             title,
             description,
-            category: (category as Category) || 'その他',
+            category: category.length > 0 ? category : ['その他'],
             tags,
             tools: tools.length > 0 ? tools : undefined,
             note,
