@@ -244,6 +244,12 @@ async function getPageContent(pageId: string): Promise<{
                 external?: { url: string };
                 caption?: Array<{ plain_text: string }>;
             };
+            video?: {
+                type: string;
+                file?: { url: string };
+                external?: { url: string };
+                caption?: Array<{ plain_text: string }>;
+            };
         };
 
         // h1セクションの判定
@@ -262,7 +268,7 @@ async function getPageContent(pageId: string): Promise<{
             prompt = b.code?.rich_text.map((t) => t.plain_text).join('') ?? '';
         }
 
-        // 成果物セクション: テキストと画像を取得
+        // 成果物セクション: テキスト・画像・動画を取得
         if (section === 'output') {
             if (b.type === 'paragraph') {
                 const text = b.paragraph?.rich_text.map((t) => t.plain_text).join('') ?? '';
@@ -284,8 +290,18 @@ async function getPageContent(pageId: string): Promise<{
                     outputs.push({ type: 'image', content: imageUrl, alt });
                 }
             }
+
+            // 動画ブロック（Notionにアップロード or 外部URL）
+            if (b.type === 'video') {
+                const videoUrl = b.video?.type === 'file' ? b.video.file?.url : b.video?.external?.url;
+                const caption = b.video?.caption?.map((c) => c.plain_text).join('') || undefined;
+                if (videoUrl) {
+                    outputs.push({ type: 'video', content: videoUrl, alt: caption });
+                }
+            }
         }
     }
 
     return { prompt, outputs };
+
 }

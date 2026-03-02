@@ -4,8 +4,8 @@
 export type Category = '画像生成' | '文章生成' | 'コード生成' | '分析・要約' | 'その他';
 
 export interface PromptOutput {
-  type: 'text' | 'image';
-  content: string;           // テキストの場合は内容、画像の場合はURLまたはパス
+  type: 'text' | 'image' | 'video';
+  content: string;           // text: 本文、image: URL、video: URL
   alt?: string;              // 画像のalt属性
 }
 

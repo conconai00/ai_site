@@ -173,6 +173,22 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                                                 <p className={styles.outputCaption}>{output.alt}</p>
                                             )}
                                         </div>
+                                    ) : output.type === 'video' ? (
+                                        /* 動画成果物 */
+                                        <div className={styles.outputVideo}>
+                                            <video
+                                                src={output.content}
+                                                controls
+                                                playsInline
+                                                className={styles.outputVideoEl}
+                                                preload="metadata"
+                                            >
+                                                お使いのブラウザは動画再生に対応していません。
+                                            </video>
+                                            {output.alt && (
+                                                <p className={styles.outputCaption}>{output.alt}</p>
+                                            )}
+                                        </div>
                                     ) : (
                                         /* テキスト成果物 */
                                         <div className={styles.outputText}>
