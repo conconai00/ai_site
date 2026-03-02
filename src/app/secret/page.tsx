@@ -16,6 +16,19 @@ export default function SecretPage() {
             {/* 星屑背景 */}
             <div className={styles.stars} aria-hidden="true" />
 
+            {/* 提灯（左右） */}
+            <div className={styles.lanternLeft} aria-hidden="true">🏮</div>
+            <div className={styles.lanternRight} aria-hidden="true">🏮</div>
+
+            {/* 花びら（舞い落ちる） */}
+            <div className={styles.petal} aria-hidden="true">🌸</div>
+            <div className={styles.petal} aria-hidden="true">🌸</div>
+            <div className={styles.petal} aria-hidden="true">🌸</div>
+            <div className={styles.petal} aria-hidden="true">🌸</div>
+            <div className={styles.petal} aria-hidden="true">🌸</div>
+            <div className={styles.petal} aria-hidden="true">🌸</div>
+
+
             <div className={styles.container}>
 
                 {/* ── 発見演出ヘッダー ── */}
