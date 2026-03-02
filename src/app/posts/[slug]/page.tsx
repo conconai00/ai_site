@@ -6,6 +6,9 @@ import { categoryColors } from '@/lib/mock-data';
 import PromptBlock from '@/components/PromptBlock';
 import styles from './page.module.css';
 
+// 60秒ごとにNotionから最新データを再取得（ISR）
+export const revalidate = 60;
+
 // 静的パス生成
 export async function generateStaticParams() {
     const slugs = await fetchAllSlugs();
