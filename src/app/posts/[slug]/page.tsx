@@ -45,7 +45,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         notFound();
     }
 
-    const categoryColor = categoryColors[article.category];
+    // 最初のカテゴリで色を決定（マルチセレクト対応）
+    const primaryCategory = article.category[0];
+    const categoryColor = categoryColors[primaryCategory] ?? categoryColors['その他'];
 
     return (
         <div className={styles.page}>
@@ -60,13 +62,21 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
                 {/* 記事ヘッダー */}
                 <header className={styles.articleHeader}>
-                    {/* カテゴリバッジ */}
-                    <span
-                        className={styles.categoryBadge}
-                        style={{ backgroundColor: categoryColor.bg, color: categoryColor.text }}
-                    >
-                        {article.category}
-                    </span>
+                    {/* カテゴリバッジ（複数対応） */}
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        {article.category.map((cat) => {
+                            const color = categoryColors[cat] ?? categoryColors['その他'];
+                            return (
+                                <span
+                                    key={cat}
+                                    className={styles.categoryBadge}
+                                    style={{ backgroundColor: color.bg, color: color.text }}
+                                >
+                                    {cat}
+                                </span>
+                            );
+                        })}
+                    </div>
 
                     {/* タイトル */}
                     <h1 className={styles.title}>{article.title}</h1>
