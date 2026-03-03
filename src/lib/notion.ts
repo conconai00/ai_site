@@ -136,10 +136,14 @@ export async function getArticlesFromNotion(): Promise<Article[]> {
         const title = getText(props['タイトル']);
         const description = getText(props['説明']);
         // カテゴリはマルチセレクトとして取得（シングルセレクトの場合は配列に変換）
-        const categoryRaw = getMultiSelect(props['カテゴリ']);
+        const rawCategoryProp = props['カテゴリ'];
+        console.log('[Notion Debug] カテゴリpropertyオブジェクト:', JSON.stringify(rawCategoryProp));
+        const categoryRaw = getMultiSelect(rawCategoryProp);
+        console.log('[Notion Debug] getMultiSelect結果:', categoryRaw);
         const category = categoryRaw.length > 0
             ? categoryRaw as Category[]
-            : [getSelect(props['カテゴリ']) as Category].filter(Boolean) as Category[];
+            : [getSelect(rawCategoryProp) as Category].filter(Boolean) as Category[];
+        console.log('[Notion Debug] 最終カテゴリ:', category);
         const tags = getMultiSelect(props['タグ']);
         const tools = getMultiSelect(props['使用ツール']);
         const createdAt = getDate(props['作成日']);
