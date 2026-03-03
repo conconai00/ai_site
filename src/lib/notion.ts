@@ -44,6 +44,40 @@ function getMultiSelect(property: Record<string, unknown>): string[] {
     return prop?.multi_select?.map((s) => s.name) ?? [];
 }
 
+/**
+ * カテゴリ専用取得関数
+ * multi_select / select どちらの型でも正しく値を取り出す
+ * Notionでプロパティ型を変更した際のデータ移行漏れにも対応
+ */
+function getCategoryValues(property: Record<string, unknown>): string[] {
+    if (!property) return [];
+    const prop = property as {
+        type: string;
+        multi_select?: Array<{ name: string }>;
+        select?: { name: string } | null;
+    };
+
+    // multi_select型の場合
+    if (prop.type === 'multi_select' && Array.isArray(prop.multi_select)) {
+        return prop.multi_select.map((s) => s.name).filter(Boolean);
+    }
+
+    // select型の場合（型変更前のデータや単一カテゴリへのフォールバック）
+    if (prop.type === 'select' && prop.select?.name) {
+        return [prop.select.name];
+    }
+
+    // どちらでもない場合（型不明時に両方試みる）
+    if (Array.isArray(prop.multi_select) && prop.multi_select.length > 0) {
+        return prop.multi_select.map((s) => s.name).filter(Boolean);
+    }
+    if (prop.select?.name) {
+        return [prop.select.name];
+    }
+
+    return [];
+}
+
 /** Checkboxプロパティを真偽値として取得 */
 function getCheckbox(property: Record<string, unknown>): boolean {
     const prop = property as { type: string; checkbox?: boolean };
@@ -135,15 +169,9 @@ export async function getArticlesFromNotion(): Promise<Article[]> {
         // プロパティを取得
         const title = getText(props['タイトル']);
         const description = getText(props['説明']);
-        // カテゴリはマルチセレクトとして取得（シングルセレクトの場合は配列に変換）
-        const rawCategoryProp = props['カテゴリ'];
-        console.log('[Notion Debug] カテゴリpropertyオブジェクト:', JSON.stringify(rawCategoryProp));
-        const categoryRaw = getMultiSelect(rawCategoryProp);
-        console.log('[Notion Debug] getMultiSelect結果:', categoryRaw);
-        const category = categoryRaw.length > 0
-            ? categoryRaw as Category[]
-            : [getSelect(rawCategoryProp) as Category].filter(Boolean) as Category[];
-        console.log('[Notion Debug] 最終カテゴリ:', category);
+        // カテゴリは multi_select / select 両対応の専用関数で取得
+        const category = getCategoryValues(props['カテゴリ']) as Category[];
+        console.log(`[Notion] 記事カテゴリ: "${title}" =>`, category);
         const tags = getMultiSelect(props['タグ']);
         const tools = getMultiSelect(props['使用ツール']);
         const createdAt = getDate(props['作成日']);
@@ -196,11 +224,8 @@ export async function getArticleFromNotion(slug: string): Promise<Article | unde
 
         const title = getText(props['タイトル']);
         const description = getText(props['説明']);
-        // カテゴリはマルチセレクトとして取得（シングルセレクトの場合は配列に変換）
-        const categoryRaw = getMultiSelect(props['カテゴリ']);
-        const category = categoryRaw.length > 0
-            ? categoryRaw as Category[]
-            : [getSelect(props['カテゴリ']) as Category].filter(Boolean) as Category[];
+        // カテゴリは multi_select / select 両対応の専用関数で取得
+        const category = getCategoryValues(props['カテゴリ']) as Category[];
         const tags = getMultiSelect(props['タグ']);
         const tools = getMultiSelect(props['使用ツール']);
         const createdAt = getDate(props['作成日']);
