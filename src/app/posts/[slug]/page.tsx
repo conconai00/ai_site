@@ -149,7 +149,15 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                         {article.note && (
                             <div className={styles.noteBox}>
                                 <span className={styles.noteIcon}>⚠️</span>
-                                <p className={styles.noteText}>{article.note}</p>
+                                <p className={styles.noteText}>
+                                    {/* Notionの改行（\n）を <br /> に変換して表示 */}
+                                    {article.note.split('\n').map((line, i, arr) => (
+                                        <span key={i}>
+                                            {line}
+                                            {i < arr.length - 1 && <br />}
+                                        </span>
+                                    ))}
+                                </p>
                             </div>
                         )}
                     </section>
